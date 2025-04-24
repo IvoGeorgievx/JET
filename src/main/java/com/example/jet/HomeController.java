@@ -1,13 +1,17 @@
 package com.example.jet;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestController("/")
 public class HomeController {
 
-    @RequestMapping("/")
+    @Value("${server.port}")
+    private String serverPort;
+
+    @RequestMapping()
     public String index() {
-        return "Hi";
+        return "Server is running on port: " + serverPort;
     }
 }
