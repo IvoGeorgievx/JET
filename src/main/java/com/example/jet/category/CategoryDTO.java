@@ -1,32 +1,17 @@
 package com.example.jet.category;
 
-import com.example.jet.transaction.Transaction;
-import jakarta.persistence.*;
-
-import java.util.Set;
 import java.util.UUID;
 
-@Entity()
-@Table(name = "jet_category")
-public class Category {
-    @Id()
-    @GeneratedValue(strategy = GenerationType.UUID)
+public class CategoryDTO {
     private UUID id;
-
-    @Column(unique = true)
     private String name;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type")
     private CategoryType type;
 
-    @OneToMany(mappedBy = "category")
-    private Set<Transaction> transactions;
-
-    public Category() {
+    public CategoryDTO() {
     }
 
-    public Category(String name, CategoryType type) {
+    public CategoryDTO(UUID id, String name, CategoryType type) {
+        this.id = id;
         this.name = name;
         this.type = type;
     }
@@ -55,3 +40,5 @@ public class Category {
         this.type = type;
     }
 }
+
+
