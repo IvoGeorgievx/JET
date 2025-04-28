@@ -1,47 +1,21 @@
 package com.example.jet.transaction;
 
 import com.example.jet.category.Category;
-import jakarta.persistence.*;
 
-import java.util.UUID;
-
-@Entity()
-@Table(name = "jet_transaction")
-public class Transaction {
-    @Id()
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "transaction_type")
+public class CreateTransactionDTO {
     private TransactionType type;
-
-    @Column(name = "amount")
     private Float amount;
-
-    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    public Transaction() {
-    }
-
-    public Transaction(TransactionType type, Float amount, String description, Category category) {
+    public CreateTransactionDTO(TransactionType type, Float amount, String description, Category category) {
         this.type = type;
         this.amount = amount;
         this.description = description;
         this.category = category;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+    public CreateTransactionDTO() {
     }
 
     public TransactionType getType() {

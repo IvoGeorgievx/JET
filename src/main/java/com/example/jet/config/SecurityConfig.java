@@ -12,11 +12,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for API usage
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults()); // Enable Basic Auth with default settings
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
