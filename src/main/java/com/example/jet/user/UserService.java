@@ -1,19 +1,23 @@
 package com.example.jet.user;
 
+import com.example.jet.transaction.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component()
+@Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TransactionRepository transactionRepository;
 
     @Autowired()
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, TransactionRepository transactionRepository) {
+
         this.userRepository = userRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     public UserDTO createUser(String username, String password) {
@@ -26,4 +30,8 @@ public class UserService {
         List<User> users = userRepository.findAll();
         return users.stream().map(user -> new UserDTO(user.getId().toString(), user.getUsername())).collect(Collectors.toList());
     }
+
+//    public List<TransactionDTO> getUserTransactions() {
+//
+//    }
 }

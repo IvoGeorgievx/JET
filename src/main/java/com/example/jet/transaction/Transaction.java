@@ -1,6 +1,7 @@
 package com.example.jet.transaction;
 
 import com.example.jet.category.Category;
+import com.example.jet.user.User;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -26,14 +27,27 @@ public class Transaction {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Transaction() {
     }
 
-    public Transaction(TransactionType type, Float amount, String description, Category category) {
+    public Transaction(TransactionType type, Float amount, String description, Category category, User user) {
         this.type = type;
         this.amount = amount;
         this.description = description;
         this.category = category;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public UUID getId() {

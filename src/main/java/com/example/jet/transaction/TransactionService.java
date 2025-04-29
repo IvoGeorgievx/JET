@@ -2,24 +2,30 @@ package com.example.jet.transaction;
 
 import com.example.jet.category.Category;
 import com.example.jet.category.CategoryRepository;
-import org.springframework.stereotype.Component;
+import com.example.jet.user.User;
+import com.example.jet.user.UserRepository;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
-    public TransactionService(TransactionRepository transactionRepository, CategoryRepository categoryRepository) {
+
+    public TransactionService(TransactionRepository transactionRepository, CategoryRepository categoryRepository, UserRepository userRepository) {
         this.transactionRepository = transactionRepository;
         this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
     }
+
 
     TransactionDTO createTransaction(CreateTransactionDTO data) {
         Category category = this.categoryRepository.findById(data.getCategory().getId()).orElseThrow(() -> new IllegalArgumentException("Category not found"));
-        System.out.println(category);
-        Transaction transaction = new Transaction(data.getType(), data.getAmount(), data.getDescription(), category);
+        User user = this.userRepository.findById(data.getUserId()).orElseThrow(() -> new IllegalArgumentException("No such user found"));
+        Transaction transaction = new Transaction(data.getType(), data.getAmount(), data.getDescription(), data.getCategory(), user);
         Transaction savedTransaction = this.transactionRepository.save(transaction);
-        return new TransactionDTO(savedTransaction.getId(), savedTransaction.getType(), savedTransaction.getAmount(), savedTransaction.getDescription(), savedTransaction.getCategory());
+        return new TransactionDTO(savedTransaction.getId(), savedTransaction.getType(), savedTransaction.getAmount(), savedTransaction.getDescription(), category, savedTransaction.getUser().getId());
     }
 }

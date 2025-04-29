@@ -10,16 +10,27 @@ public class TransactionDTO {
     private Float amount;
     private String description;
     private Category category;
+    private UUID userId;
+
 
     public TransactionDTO() {
     }
 
-    public TransactionDTO(UUID id, TransactionType type, Float amount, String description, Category category) {
+    public TransactionDTO(UUID id, TransactionType type, Float amount, String description, Category category, UUID userId) {
         this.id = id;
         this.type = type;
         this.amount = amount;
         this.description = description;
         this.category = category;
+        this.userId = userId;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public UUID getId() {

@@ -25,4 +25,9 @@ public class UserController {
     List<UserDTO> getUsers() {
         return this.userService.getUsers();
     }
+
+//    @GetMapping("transaction")
+//    List<TransactionDTO> getUserTransactions() {
+//        return this.userService.getUserTransactions();
+//    }
 }
