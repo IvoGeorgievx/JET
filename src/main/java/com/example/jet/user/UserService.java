@@ -1,7 +1,11 @@
 package com.example.jet.user;
 
 import com.example.jet.transaction.TransactionRepository;
+import com.example.jet.utils.JwtUtil;
+import com.example.jet.utils.PasswordHasher;
+import com.example.jet.utils.PasswordVerifier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +17,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
 
-    @Autowired()
+    @Autowired
+    AuthenticationManager authManager;
+
+    @Autowired
     public UserService(UserRepository userRepository, TransactionRepository transactionRepository) {
 
         this.userRepository = userRepository;
@@ -21,14 +28,27 @@ public class UserService {
     }
 
     public UserDTO createUser(String username, String password) {
-        User newUser = new User(username, password);
+        String hashedPassword = PasswordHasher.hashPassword(password);
+        User newUser = new User(username, hashedPassword);
         User savedUser = userRepository.save(newUser);
-        return new UserDTO(savedUser.getId().toString(), savedUser.getUsername());
+        return new UserDTO(savedUser.getId(), savedUser.getUsername());
+    }
+
+    public SignInResponseDTO login(SignInDTO data) {
+        User user = this.userRepository.findByUsername(data.getUsername()).orElseThrow(() -> new IllegalArgumentException("Wrong username or password"));
+        String password = data.getPassword();
+        boolean passwordMatch = PasswordVerifier.verifyPassword(user.getPassword(), password);
+        if (!passwordMatch) {
+            throw new IllegalArgumentException("Wrong username or password.");
+        }
+        String token = JwtUtil.generateToken(user.getId(), user.getUsername());
+        UserDTO userDTO = new UserDTO(user.getId(), user.getUsername());
+        return new SignInResponseDTO(token, userDTO);
     }
 
     public List<UserDTO> getUsers() {
         List<User> users = userRepository.findAll();
-        return users.stream().map(user -> new UserDTO(user.getId().toString(), user.getUsername())).collect(Collectors.toList());
+        return users.stream().map(user -> new UserDTO(user.getId(), user.getUsername())).collect(Collectors.toList());
     }
 
 //    public List<TransactionDTO> getUserTransactions() {

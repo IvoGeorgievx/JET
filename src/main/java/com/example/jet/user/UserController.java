@@ -17,8 +17,13 @@ public class UserController {
 
 
     @PostMapping("sign-up")
-    UserDTO createUser(@RequestBody SignUpRequest signUpRequest) {
+    UserDTO createUser(@RequestBody SignUpDTO signUpRequest) {
         return this.userService.createUser(signUpRequest.getUsername(), signUpRequest.getPassword());
+    }
+
+    @PostMapping("sign-in")
+    SignInResponseDTO login(@RequestBody SignInDTO signInDTO) {
+        return this.userService.login(signInDTO);
     }
 
     @GetMapping("all")

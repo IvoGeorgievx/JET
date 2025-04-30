@@ -1,6 +1,6 @@
 package com.example.jet.user;
 
-public class SignUpRequest {
+public class SignUpDTO {
 
     private String username;
     private String password;

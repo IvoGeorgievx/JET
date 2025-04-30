@@ -1,19 +1,21 @@
 package com.example.jet.user;
 
+import java.util.UUID;
+
 public class UserDTO {
-    private String id;
+    private UUID id;
     private String username;
 
-    public UserDTO(String id, String username) {
+    public UserDTO(UUID id, String username) {
         this.id = id;
         this.username = username;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
