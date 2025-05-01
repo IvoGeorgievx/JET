@@ -12,7 +12,7 @@ public class CategoryService {
     }
 
 
-    CategoryDTO createCategory(CreateCategoryDTO data) {
+    public CategoryDTO createCategory(CreateCategoryDTO data) {
         Category newCategory = new Category(data.getName(), data.getType());
         Category savedCategory = categoryRepository.save(newCategory);
         return new CategoryDTO(savedCategory.getId(), savedCategory.getName(), savedCategory.getType());

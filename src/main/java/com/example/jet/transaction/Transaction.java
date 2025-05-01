@@ -4,6 +4,7 @@ import com.example.jet.category.Category;
 import com.example.jet.user.User;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity()
@@ -23,10 +24,11 @@ public class Transaction {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "created_at")
+    private LocalDate date;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -38,8 +40,17 @@ public class Transaction {
         this.type = type;
         this.amount = amount;
         this.description = description;
+        this.date = LocalDate.now();
         this.category = category;
         this.user = user;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public User getUser() {

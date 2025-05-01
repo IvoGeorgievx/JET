@@ -1,9 +1,11 @@
 package com.example.jet.transaction;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.jet.transaction.dto.CreateTransactionDTO;
+import com.example.jet.transaction.dto.OverallTransactionDTO;
+import com.example.jet.transaction.dto.TransactionDTO;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("transactions")
@@ -20,5 +22,8 @@ public class TransactionController {
         return this.transactionService.createTransaction(body);
     }
 
-
+    @GetMapping("overall")
+    OverallTransactionDTO getOverallTransactions() {
+        return this.transactionService.getOverallTransactions(UUID.fromString("f98a9b98-fed8-459f-af8f-4ef3bf376134"), TransactionPeriod.DAILY);
+    }
 }

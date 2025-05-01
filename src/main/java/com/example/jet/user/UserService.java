@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,7 +52,9 @@ public class UserService {
         return users.stream().map(user -> new UserDTO(user.getId(), user.getUsername())).collect(Collectors.toList());
     }
 
-//    public List<TransactionDTO> getUserTransactions() {
-//
-//    }
+    public User getUserById(UUID userId) {
+        return this.userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+
 }

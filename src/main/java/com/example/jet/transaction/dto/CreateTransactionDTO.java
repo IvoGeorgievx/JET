@@ -1,28 +1,26 @@
-package com.example.jet.transaction;
+package com.example.jet.transaction.dto;
 
 import com.example.jet.category.Category;
+import com.example.jet.transaction.TransactionType;
 
 import java.util.UUID;
 
-public class TransactionDTO {
-    private UUID id;
+public class CreateTransactionDTO {
     private TransactionType type;
     private Float amount;
     private String description;
     private Category category;
     private UUID userId;
 
-
-    public TransactionDTO() {
-    }
-
-    public TransactionDTO(UUID id, TransactionType type, Float amount, String description, Category category, UUID userId) {
-        this.id = id;
+    public CreateTransactionDTO(TransactionType type, Float amount, String description, Category category, UUID userId) {
         this.type = type;
         this.amount = amount;
         this.description = description;
         this.category = category;
         this.userId = userId;
+    }
+
+    public CreateTransactionDTO() {
     }
 
     public UUID getUserId() {
@@ -31,14 +29,6 @@ public class TransactionDTO {
 
     public void setUserId(UUID userId) {
         this.userId = userId;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public TransactionType getType() {
