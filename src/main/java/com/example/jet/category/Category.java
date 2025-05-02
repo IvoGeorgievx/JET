@@ -23,12 +23,33 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private Set<Transaction> transactions;
 
+    @Column(name = "budge", nullable = true)
+    private Float budget;
+
     public Category() {
     }
 
-    public Category(String name, CategoryType type) {
+    public Category(String name, CategoryType type, Float budget) {
         this.name = name;
         this.type = type;
+        this.budget = budget;
+    }
+
+
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public Float getBudget() {
+        return budget;
+    }
+
+    public void setBudget(Float budget) {
+        this.budget = budget;
     }
 
     public UUID getId() {

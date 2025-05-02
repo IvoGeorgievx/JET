@@ -11,16 +11,32 @@ public class CreateTransactionDTO {
     private String description;
     private Category category;
     private UUID userId;
+    private Boolean recurring;
 
-    public CreateTransactionDTO(TransactionType type, Float amount, String description, Category category, UUID userId) {
+
+
+    public CreateTransactionDTO(TransactionType type, Float amount, String description, Category category, UUID userId, boolean recurring) {
         this.type = type;
         this.amount = amount;
         this.description = description;
         this.category = category;
         this.userId = userId;
+        this.recurring = recurring;
+    }
+
+    public CreateTransactionDTO(TransactionType type, Float amount, String description, Category category, UUID userId ) {
+        this(type, amount, description, category, userId, false);
     }
 
     public CreateTransactionDTO() {
+    }
+
+    public boolean isRecurring() {
+        return recurring;
+    }
+
+    public void setRecurring(boolean recurring) {
+        this.recurring = recurring;
     }
 
     public UUID getUserId() {

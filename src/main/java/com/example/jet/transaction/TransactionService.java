@@ -32,10 +32,12 @@ public class TransactionService {
 
 
     public TransactionDTO createTransaction(CreateTransactionDTO data) {
+        Boolean isRecurring = data.isRecurring();
         Category category = this.categoryRepository.findById(data.getCategory().getId()).orElseThrow(() -> new IllegalArgumentException("Category not found"));
         User user = this.userRepository.findById(data.getUserId()).orElseThrow(() -> new IllegalArgumentException("No such user found"));
-        Transaction transaction = new Transaction(data.getType(), data.getAmount(), data.getDescription(), data.getCategory(), user);
+        Transaction transaction = new Transaction(data.getType(), data.getAmount(), data.getDescription(), data.getCategory(), user, isRecurring);
         Transaction savedTransaction = this.transactionRepository.save(transaction);
+        // make sure to set a recurring timeline later on.
         return new TransactionDTO(savedTransaction.getId(), savedTransaction.getType(), savedTransaction.getAmount(), savedTransaction.getDescription(), category, savedTransaction.getUser().getId());
     }
 

@@ -26,6 +26,9 @@ public class Transaction {
 
     @Column(name = "created_at")
     private LocalDate date;
+
+    @Column(name = "recurring")
+    private boolean recurring;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -33,16 +36,28 @@ public class Transaction {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Transaction() {
-    }
 
-    public Transaction(TransactionType type, Float amount, String description, Category category, User user) {
+    public Transaction(TransactionType type, Float amount, String description, Category category, User user, boolean recurring) {
         this.type = type;
         this.amount = amount;
         this.description = description;
         this.date = LocalDate.now();
         this.category = category;
         this.user = user;
+        this.recurring = recurring;
+    }
+
+    public Transaction(TransactionType type, Float amount, String description, Category category, User user) {
+        this(type, amount, description, category, user, false);
+    }
+
+
+    public boolean isRecurring() {
+        return recurring;
+    }
+
+    public void setRecurring(boolean recurring) {
+        this.recurring = recurring;
     }
 
     public LocalDate getDate() {
