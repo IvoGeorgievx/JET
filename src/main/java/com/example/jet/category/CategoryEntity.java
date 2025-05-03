@@ -1,6 +1,6 @@
 package com.example.jet.category;
 
-import com.example.jet.transaction.Transaction;
+import com.example.jet.transaction.TransactionEntity;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Entity()
 @Table(name = "jet_category")
-public class Category {
+public class CategoryEntity {
     @Id()
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -21,27 +21,27 @@ public class Category {
     private CategoryType type;
 
     @OneToMany(mappedBy = "category")
-    private Set<Transaction> transactions;
+    private Set<TransactionEntity> transactionEntities;
 
-    @Column(name = "budge", nullable = true)
+    @Column(name = "budget", nullable = true)
     private Float budget;
 
-    public Category() {
+    public CategoryEntity() {
     }
 
-    public Category(String name, CategoryType type, Float budget) {
+    public CategoryEntity(String name, CategoryType type, Float budget) {
         this.name = name;
         this.type = type;
         this.budget = budget;
     }
 
 
-    public Set<Transaction> getTransactions() {
-        return transactions;
+    public Set<TransactionEntity> getTransactions() {
+        return transactionEntities;
     }
 
-    public void setTransactions(Set<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setTransactions(Set<TransactionEntity> transactionEntities) {
+        this.transactionEntities = transactionEntities;
     }
 
     public Float getBudget() {

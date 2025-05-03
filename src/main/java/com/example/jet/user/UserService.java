@@ -30,29 +30,29 @@ public class UserService {
 
     public UserDTO createUser(String username, String password) {
         String hashedPassword = PasswordHasher.hashPassword(password);
-        User newUser = new User(username, hashedPassword);
-        User savedUser = userRepository.save(newUser);
-        return new UserDTO(savedUser.getId(), savedUser.getUsername());
+        UserEntity newUserEntity = new UserEntity(username, hashedPassword);
+        UserEntity savedUserEntity = userRepository.save(newUserEntity);
+        return new UserDTO(savedUserEntity.getId(), savedUserEntity.getUsername());
     }
 
     public SignInResponseDTO login(SignInDTO data) {
-        User user = this.userRepository.findByUsername(data.getUsername()).orElseThrow(() -> new IllegalArgumentException("Wrong username or password"));
+        UserEntity userEntity = this.userRepository.findByUsername(data.getUsername()).orElseThrow(() -> new IllegalArgumentException("Wrong username or password"));
         String password = data.getPassword();
-        boolean passwordMatch = PasswordVerifier.verifyPassword(user.getPassword(), password);
+        boolean passwordMatch = PasswordVerifier.verifyPassword(userEntity.getPassword(), password);
         if (!passwordMatch) {
             throw new IllegalArgumentException("Wrong username or password.");
         }
-        String token = JwtUtil.generateToken(user.getId(), user.getUsername());
-        UserDTO userDTO = new UserDTO(user.getId(), user.getUsername());
+        String token = JwtUtil.generateToken(userEntity.getId(), userEntity.getUsername());
+        UserDTO userDTO = new UserDTO(userEntity.getId(), userEntity.getUsername());
         return new SignInResponseDTO(token, userDTO);
     }
 
     public List<UserDTO> getUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map(user -> new UserDTO(user.getId(), user.getUsername())).collect(Collectors.toList());
+        List<UserEntity> userEntities = userRepository.findAll();
+        return userEntities.stream().map(userEntity -> new UserDTO(userEntity.getId(), userEntity.getUsername())).collect(Collectors.toList());
     }
 
-    public User getUserById(UUID userId) {
+    public UserEntity getUserById(UUID userId) {
         return this.userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 

@@ -1,6 +1,6 @@
 package com.example.jet.user;
 
-import com.example.jet.transaction.Transaction;
+import com.example.jet.transaction.TransactionEntity;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Entity()
 @Table(name = "jet_user")
-public class User {
+public class UserEntity {
 
     @Id()
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -19,22 +19,22 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Transaction> transactions;
+    private List<TransactionEntity> transactionEntities;
 
-    public User(String username, String password) {
+    public UserEntity(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public User() {
+    public UserEntity() {
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public List<TransactionEntity> getTransactions() {
+        return transactionEntities;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setTransactions(List<TransactionEntity> transactionEntities) {
+        this.transactionEntities = transactionEntities;
     }
 
     public UUID getId() {

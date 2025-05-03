@@ -1,6 +1,6 @@
 package com.example.jet.transaction.dto;
 
-import com.example.jet.category.Category;
+import com.example.jet.category.CategoryEntity;
 import com.example.jet.transaction.TransactionType;
 
 import java.util.UUID;
@@ -10,19 +10,19 @@ public class TransactionDTO {
     private TransactionType type;
     private Float amount;
     private String description;
-    private Category category;
+    private CategoryEntity categoryEntity;
     private UUID userId;
 
 
     public TransactionDTO() {
     }
 
-    public TransactionDTO(UUID id, TransactionType type, Float amount, String description, Category category, UUID userId) {
+    public TransactionDTO(UUID id, TransactionType type, Float amount, String description, CategoryEntity categoryEntity, UUID userId) {
         this.id = id;
         this.type = type;
         this.amount = amount;
         this.description = description;
-        this.category = category;
+        this.categoryEntity = categoryEntity;
         this.userId = userId;
     }
 
@@ -66,11 +66,11 @@ public class TransactionDTO {
         this.description = description;
     }
 
-    public Category getCategory() {
-        return category;
+    public CategoryEntity getCategory() {
+        return categoryEntity;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory(CategoryEntity categoryEntity) {
+        this.categoryEntity = categoryEntity;
     }
 }

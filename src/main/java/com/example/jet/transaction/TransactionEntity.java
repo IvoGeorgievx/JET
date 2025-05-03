@@ -1,7 +1,7 @@
 package com.example.jet.transaction;
 
-import com.example.jet.category.Category;
-import com.example.jet.user.User;
+import com.example.jet.category.CategoryEntity;
+import com.example.jet.user.UserEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Entity()
 @Table(name = "jet_transaction")
-public class Transaction {
+public class TransactionEntity {
     @Id()
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -31,24 +31,24 @@ public class Transaction {
     private boolean recurring;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    private CategoryEntity categoryEntity;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private UserEntity userEntity;
 
 
-    public Transaction(TransactionType type, Float amount, String description, Category category, User user, boolean recurring) {
+    public TransactionEntity(TransactionType type, Float amount, String description, CategoryEntity categoryEntity, UserEntity userEntity, boolean recurring) {
         this.type = type;
         this.amount = amount;
         this.description = description;
         this.date = LocalDate.now();
-        this.category = category;
-        this.user = user;
+        this.categoryEntity = categoryEntity;
+        this.userEntity = userEntity;
         this.recurring = recurring;
     }
 
-    public Transaction(TransactionType type, Float amount, String description, Category category, User user) {
-        this(type, amount, description, category, user, false);
+    public TransactionEntity(TransactionType type, Float amount, String description, CategoryEntity categoryEntity, UserEntity userEntity) {
+        this(type, amount, description, categoryEntity, userEntity, false);
     }
 
 
@@ -68,12 +68,12 @@ public class Transaction {
         this.date = date;
     }
 
-    public User getUser() {
-        return user;
+    public UserEntity getUser() {
+        return userEntity;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     public UUID getId() {
@@ -108,11 +108,11 @@ public class Transaction {
         this.description = description;
     }
 
-    public Category getCategory() {
-        return category;
+    public CategoryEntity getCategory() {
+        return categoryEntity;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory(CategoryEntity categoryEntity) {
+        this.categoryEntity = categoryEntity;
     }
 }

@@ -13,8 +13,8 @@ public class CategoryService {
 
 
     public CategoryDTO createCategory(CreateCategoryDTO data) {
-        Category newCategory = new Category(data.getName(), data.getType(), data.getBudget());
-        Category savedCategory = categoryRepository.save(newCategory);
-        return new CategoryDTO(savedCategory.getId(), savedCategory.getName(), savedCategory.getType(), savedCategory.getBudget());
+        CategoryEntity newCategoryEntity = new CategoryEntity(data.getName(), data.getType(), data.getBudget());
+        CategoryEntity savedCategoryEntity = categoryRepository.save(newCategoryEntity);
+        return new CategoryDTO(savedCategoryEntity.getId(), savedCategoryEntity.getName(), savedCategoryEntity.getType(), savedCategoryEntity.getBudget());
     }
 }

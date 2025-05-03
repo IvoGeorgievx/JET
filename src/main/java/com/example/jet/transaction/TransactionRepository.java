@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
+public interface TransactionRepository extends JpaRepository<TransactionEntity, UUID> {
 
     @Query("SELECT t FROM Transaction t WHERE t.user.id = :userId and t.type =:type AND t.date BETWEEN :start AND :end")
-    List<Transaction> findByPeriod(@Param("userId") UUID userId, @Param("type") TransactionType type, @Param("start") LocalDate start, @Param("end") LocalDate end);
+    List<TransactionEntity> findByPeriod(@Param("userId") UUID userId, @Param("type") TransactionType type, @Param("start") LocalDate start, @Param("end") LocalDate end);
 
 }

@@ -1,11 +1,11 @@
 package com.example.jet.transaction;
 
-import com.example.jet.category.Category;
+import com.example.jet.category.CategoryEntity;
 import com.example.jet.category.CategoryRepository;
 import com.example.jet.transaction.dto.CreateTransactionDTO;
 import com.example.jet.transaction.dto.OverallTransactionDTO;
 import com.example.jet.transaction.dto.TransactionDTO;
-import com.example.jet.user.User;
+import com.example.jet.user.UserEntity;
 import com.example.jet.user.UserRepository;
 import com.example.jet.user.UserService;
 import org.springframework.stereotype.Service;
@@ -33,16 +33,16 @@ public class TransactionService {
 
     public TransactionDTO createTransaction(CreateTransactionDTO data) {
         Boolean isRecurring = data.isRecurring();
-        Category category = this.categoryRepository.findById(data.getCategory().getId()).orElseThrow(() -> new IllegalArgumentException("Category not found"));
-        User user = this.userRepository.findById(data.getUserId()).orElseThrow(() -> new IllegalArgumentException("No such user found"));
-        Transaction transaction = new Transaction(data.getType(), data.getAmount(), data.getDescription(), data.getCategory(), user, isRecurring);
-        Transaction savedTransaction = this.transactionRepository.save(transaction);
+        CategoryEntity categoryEntity = this.categoryRepository.findById(data.getCategory().getId()).orElseThrow(() -> new IllegalArgumentException("Category not found"));
+        UserEntity userEntity = this.userRepository.findById(data.getUserId()).orElseThrow(() -> new IllegalArgumentException("No such user found"));
+        TransactionEntity transactionEntity = new TransactionEntity(data.getType(), data.getAmount(), data.getDescription(), data.getCategory(), userEntity, isRecurring);
+        TransactionEntity savedTransactionEntity = this.transactionRepository.save(transactionEntity);
         // make sure to set a recurring timeline later on.
-        return new TransactionDTO(savedTransaction.getId(), savedTransaction.getType(), savedTransaction.getAmount(), savedTransaction.getDescription(), category, savedTransaction.getUser().getId());
+        return new TransactionDTO(savedTransactionEntity.getId(), savedTransactionEntity.getType(), savedTransactionEntity.getAmount(), savedTransactionEntity.getDescription(), categoryEntity, savedTransactionEntity.getUser().getId());
     }
 
     public OverallTransactionDTO getOverallTransactions(UUID userId, TransactionPeriod period) {
-        User user = this.userService.getUserById(userId);
+        UserEntity userEntity = this.userService.getUserById(userId);
         LocalDate now = LocalDate.now();
         LocalDate start = switch (period) {
             case DAILY -> now;
@@ -52,11 +52,11 @@ public class TransactionService {
             default -> throw new IllegalArgumentException("Invalid period");
         };
 
-        List<Transaction> expenseTransactions = this.transactionRepository.findByPeriod(user.getId(), TransactionType.EXPENSE, now, start);
-        List<Transaction> incomeTransactions = this.transactionRepository.findByPeriod(user.getId(), TransactionType.INCOME, now, start);
+        List<TransactionEntity> expenseTransactionEntities = this.transactionRepository.findByPeriod(userEntity.getId(), TransactionType.EXPENSE, now, start);
+        List<TransactionEntity> incomeTransactionEntities = this.transactionRepository.findByPeriod(userEntity.getId(), TransactionType.INCOME, now, start);
 
-        Float expensesAmount = expenseTransactions.stream().map(Transaction::getAmount).reduce(0f, Float::sum);
-        Float incomeAmount = incomeTransactions.stream().map(Transaction::getAmount).reduce(0f, Float::sum);
+        Float expensesAmount = expenseTransactionEntities.stream().map(TransactionEntity::getAmount).reduce(0f, Float::sum);
+        Float incomeAmount = incomeTransactionEntities.stream().map(TransactionEntity::getAmount).reduce(0f, Float::sum);
 
         return new OverallTransactionDTO(incomeAmount, expensesAmount, period);
     }
