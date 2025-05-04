@@ -1,6 +1,9 @@
 package com.example.jet.user;
 
+import com.example.jet.category.CategoryEntity;
 import com.example.jet.transaction.TransactionEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -19,6 +22,13 @@ public class UserEntity {
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference("user-categories")
+    @JsonIgnoreProperties("user")
+    private List<CategoryEntity> categories;
+
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
+    @JsonManagedReference("user-transactions")
+    @JsonIgnoreProperties("userEntity")
     private List<TransactionEntity> transactionEntities;
 
     public UserEntity(String username, String password) {
@@ -28,6 +38,15 @@ public class UserEntity {
 
     public UserEntity() {
     }
+
+    public List<CategoryEntity> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<CategoryEntity> categories) {
+        this.categories = categories;
+    }
+
 
     public List<TransactionEntity> getTransactions() {
         return transactionEntities;

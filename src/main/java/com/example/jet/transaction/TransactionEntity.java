@@ -2,6 +2,7 @@ package com.example.jet.transaction;
 
 import com.example.jet.category.CategoryEntity;
 import com.example.jet.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -31,9 +32,11 @@ public class TransactionEntity {
     private boolean recurring;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
+    @JsonBackReference("category-transactions")
     private CategoryEntity categoryEntity;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference("user-transactions")
     private UserEntity userEntity;
 
 
@@ -68,11 +71,11 @@ public class TransactionEntity {
         this.date = date;
     }
 
-    public UserEntity getUser() {
+    public UserEntity getUserEntity() {
         return userEntity;
     }
 
-    public void setUser(UserEntity userEntity) {
+    public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
     }
 
@@ -108,11 +111,11 @@ public class TransactionEntity {
         this.description = description;
     }
 
-    public CategoryEntity getCategory() {
+    public CategoryEntity getCategoryEntity() {
         return categoryEntity;
     }
 
-    public void setCategory(CategoryEntity categoryEntity) {
+    public void setCategoryEntity(CategoryEntity categoryEntity) {
         this.categoryEntity = categoryEntity;
     }
 }

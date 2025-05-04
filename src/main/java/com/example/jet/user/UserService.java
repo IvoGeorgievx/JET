@@ -5,7 +5,6 @@ import com.example.jet.utils.JwtUtil;
 import com.example.jet.utils.PasswordHasher;
 import com.example.jet.utils.PasswordVerifier;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +17,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
 
-    @Autowired
-    AuthenticationManager authManager;
 
     @Autowired
     public UserService(UserRepository userRepository, TransactionRepository transactionRepository) {

@@ -38,7 +38,7 @@ public class TransactionService {
         TransactionEntity transactionEntity = new TransactionEntity(data.getType(), data.getAmount(), data.getDescription(), data.getCategory(), userEntity, isRecurring);
         TransactionEntity savedTransactionEntity = this.transactionRepository.save(transactionEntity);
         // make sure to set a recurring timeline later on.
-        return new TransactionDTO(savedTransactionEntity.getId(), savedTransactionEntity.getType(), savedTransactionEntity.getAmount(), savedTransactionEntity.getDescription(), categoryEntity, savedTransactionEntity.getUser().getId());
+        return new TransactionDTO(savedTransactionEntity.getId(), savedTransactionEntity.getType(), savedTransactionEntity.getAmount(), savedTransactionEntity.getDescription(), categoryEntity, savedTransactionEntity.getUserEntity().getId());
     }
 
     public OverallTransactionDTO getOverallTransactions(UUID userId, TransactionPeriod period) {

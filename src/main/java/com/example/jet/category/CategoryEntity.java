@@ -1,12 +1,16 @@
 package com.example.jet.category;
 
 import com.example.jet.transaction.TransactionEntity;
+import com.example.jet.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Set;
 import java.util.UUID;
 
-@Entity()
+@Entity
 @Table(name = "jet_category")
 public class CategoryEntity {
     @Id()
@@ -16,25 +20,55 @@ public class CategoryEntity {
     @Column(unique = true)
     private String name;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "type")
-    private CategoryType type;
+    private String type;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "categoryEntity")
+    @JsonManagedReference("category-transactions")
+    @JsonIgnoreProperties("categoryEntity")
     private Set<TransactionEntity> transactionEntities;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference("user-categories")
+    private UserEntity user;
+
+    @Column(name = "is_default")
+    private Boolean isDefault = false;
     @Column(name = "budget", nullable = true)
     private Float budget;
 
     public CategoryEntity() {
     }
 
-    public CategoryEntity(String name, CategoryType type, Float budget) {
+    public CategoryEntity(String name, String type, Float budget, UserEntity user, Boolean isDefault) {
         this.name = name;
         this.type = type;
         this.budget = budget;
+        this.user = user;
+        this.isDefault = isDefault;
     }
 
+    public CategoryEntity(String name, String type, Float budget, UserEntity user) {
+        this(name, type, budget, null, false);
+    }
+
+    public Boolean getDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(Boolean aDefault) {
+        isDefault = aDefault;
+    }
+
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
 
     public Set<TransactionEntity> getTransactions() {
         return transactionEntities;
@@ -68,11 +102,11 @@ public class CategoryEntity {
         this.name = name;
     }
 
-    public CategoryType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(CategoryType type) {
+    public void setType(String type) {
         this.type = type;
     }
 }

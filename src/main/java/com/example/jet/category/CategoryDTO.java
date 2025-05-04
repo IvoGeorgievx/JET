@@ -5,17 +5,27 @@ import java.util.UUID;
 public class CategoryDTO {
     private UUID id;
     private String name;
-    private CategoryType type;
+    private String type;
     private Float budget;
+    private Boolean isDefault;
 
     public CategoryDTO() {
     }
 
-    public CategoryDTO(UUID id, String name, CategoryType type, Float budget) {
+    public CategoryDTO(UUID id, String name, String type, Float budget, Boolean isDefault) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.budget = budget;
+        this.isDefault = isDefault;
+    }
+
+    public Boolean getDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(Boolean aDefault) {
+        isDefault = aDefault;
     }
 
     public Float getBudget() {
@@ -42,11 +52,11 @@ public class CategoryDTO {
         this.name = name;
     }
 
-    public CategoryType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(CategoryType type) {
+    public void setType(String type) {
         this.type = type;
     }
 }
