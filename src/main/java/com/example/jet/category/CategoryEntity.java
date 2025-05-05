@@ -57,8 +57,8 @@ public class CategoryEntity {
         return isDefault;
     }
 
-    public void setDefault(Boolean aDefault) {
-        isDefault = aDefault;
+    public void setDefault(Boolean isDefault) {
+        this.isDefault = isDefault;
     }
 
 

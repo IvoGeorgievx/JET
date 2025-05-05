@@ -30,15 +30,16 @@ public class TransactionEntity {
 
     @Column(name = "recurring")
     private boolean recurring;
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     @JsonBackReference("category-transactions")
     private CategoryEntity categoryEntity;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference("user-transactions")
     private UserEntity userEntity;
-
 
     public TransactionEntity(TransactionType type, Float amount, String description, CategoryEntity categoryEntity, UserEntity userEntity, boolean recurring) {
         this.type = type;

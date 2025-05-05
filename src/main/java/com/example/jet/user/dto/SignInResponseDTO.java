@@ -1,4 +1,6 @@
-package com.example.jet.user;
+package com.example.jet.user.dto;
+
+import com.example.jet.user.UserDTO;
 
 public class SignInResponseDTO {
     private String token;

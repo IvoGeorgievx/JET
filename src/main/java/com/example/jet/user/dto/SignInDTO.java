@@ -1,4 +1,4 @@
-package com.example.jet.user;
+package com.example.jet.user.dto;
 
 public class SignInDTO extends SignUpDTO {
 }

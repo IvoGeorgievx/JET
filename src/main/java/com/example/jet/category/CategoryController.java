@@ -1,5 +1,7 @@
 package com.example.jet.category;
 
+import com.example.jet.category.dto.CategoryDTO;
+import com.example.jet.category.dto.CreateCategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

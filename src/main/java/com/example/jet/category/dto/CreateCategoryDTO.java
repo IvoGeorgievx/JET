@@ -1,4 +1,4 @@
-package com.example.jet.category;
+package com.example.jet.category.dto;
 
 import java.util.UUID;
 

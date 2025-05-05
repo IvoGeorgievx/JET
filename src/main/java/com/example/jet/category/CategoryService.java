@@ -1,8 +1,12 @@
 package com.example.jet.category;
 
+import com.example.jet.category.dto.CategoryDTO;
+import com.example.jet.category.dto.CreateCategoryDTO;
 import com.example.jet.user.UserEntity;
 import com.example.jet.user.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class CategoryService {
@@ -23,7 +27,13 @@ public class CategoryService {
         if (userId != null) {
             user = this.userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("No such user found"));
         }
-//        should check here if the category name exists
+
+        CategoryEntity existingCategory = this.categoryRepository.findByName(data.getName()
+        ).orElse(null);
+
+        if (existingCategory != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category with this name already exists.");
+        }
 
         CategoryEntity newCategoryEntity = new CategoryEntity(data.getName(), data.getType(), data.getBudget(), user, Boolean.TRUE.equals(data.getDefault()));
         CategoryEntity savedCategoryEntity = categoryRepository.save(newCategoryEntity);
