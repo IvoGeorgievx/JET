@@ -7,6 +7,7 @@ import com.example.jet.utils.JwtUtil;
 import com.example.jet.utils.PasswordHasher;
 import com.example.jet.utils.PasswordVerifier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,11 +36,11 @@ public class UserService {
     }
 
     public SignInResponseDTO login(SignInDTO data) {
-        UserEntity userEntity = this.userRepository.findByUsername(data.getUsername()).orElseThrow(() -> new IllegalArgumentException("Wrong username or password"));
+        UserEntity userEntity = this.userRepository.findByUsername(data.getUsername()).orElseThrow(() -> new BadCredentialsException("Wrong username or password"));
         String password = data.getPassword();
         boolean passwordMatch = PasswordVerifier.verifyPassword(userEntity.getPassword(), password);
         if (!passwordMatch) {
-            throw new IllegalArgumentException("Wrong username or password.");
+            throw new BadCredentialsException("Wrong username or password.");
         }
         String token = JwtUtil.generateToken(userEntity.getId(), userEntity.getUsername());
         UserDTO userDTO = new UserDTO(userEntity.getId(), userEntity.getUsername());
