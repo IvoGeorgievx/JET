@@ -9,7 +9,7 @@ public class CategoryDTO {
     private Float budget;
     private Boolean isDefault;
 
-    public CategoryDTO() {
+    public CategoryDTO(UUID id, String name, String type, Boolean aDefault) {
     }
 
     public CategoryDTO(UUID id, String name, String type, Float budget, Boolean isDefault) {

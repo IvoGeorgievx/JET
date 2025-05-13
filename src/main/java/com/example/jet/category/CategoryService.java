@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 public class CategoryService {
 
@@ -38,5 +41,9 @@ public class CategoryService {
         CategoryEntity newCategoryEntity = new CategoryEntity(data.getName(), data.getType(), data.getBudget(), user, Boolean.TRUE.equals(data.getDefault()));
         CategoryEntity savedCategoryEntity = categoryRepository.save(newCategoryEntity);
         return new CategoryDTO(savedCategoryEntity.getId(), savedCategoryEntity.getName(), savedCategoryEntity.getType(), savedCategoryEntity.getBudget(), savedCategoryEntity.getDefault());
+    }
+
+    public List<CategoryDTO> getCategories(UUID userId) {
+        return this.categoryRepository.findByUser(userId).stream().map(categoryEntity -> new CategoryDTO(categoryEntity.getId(), categoryEntity.getName(), categoryEntity.getType(), categoryEntity.getBudget(), categoryEntity.getDefault())).collect(java.util.stream.Collectors.toList());
     }
 }

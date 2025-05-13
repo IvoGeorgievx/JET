@@ -21,4 +21,6 @@ public class JwtUtil {
                 .signWith(SECRET_KEY)
                 .compact();
     }
+
+
 }
