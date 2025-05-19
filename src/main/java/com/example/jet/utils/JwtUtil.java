@@ -22,5 +22,23 @@ public class JwtUtil {
                 .compact();
     }
 
+    public static boolean validateToken(String token) {
+        try {
+            Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
+    public static String extractUsername(String token) {
+        return Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token)
+                .getPayload().getSubject();
+    }
+
+    public static String extractUserId(String token) {
+        return Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token)
+                .getPayload().get("userId", String.class);
+    }
 }
+
