@@ -1,9 +1,11 @@
 package com.example.jet.user;
 
+import com.example.jet.config.AuthenticatedUser;
 import com.example.jet.user.dto.SignInDTO;
 import com.example.jet.user.dto.SignInResponseDTO;
 import com.example.jet.user.dto.SignUpDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,8 +36,8 @@ public class UserController {
         return this.userService.getUsers();
     }
 
-//    @GetMapping("transaction")
-//    List<TransactionDTO> getUserTransactions() {
-//        return this.userService.getUserTransactions();
-//    }
+    @GetMapping("info")
+    UserDTO getCurrentUser(@AuthenticationPrincipal AuthenticatedUser user) {
+        return this.userService.getCurrentUser(user.getUserId());
+    }
 }

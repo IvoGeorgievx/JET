@@ -7,8 +7,10 @@ import com.example.jet.utils.JwtUtil;
 import com.example.jet.utils.PasswordHasher;
 import com.example.jet.utils.PasswordVerifier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -54,6 +56,11 @@ public class UserService {
 
     public UserEntity getUserById(UUID userId) {
         return this.userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+    public UserDTO getCurrentUser(UUID userId) {
+        UserEntity user = this.userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        return new UserDTO(user.getId(), user.getUsername());
     }
 
 
