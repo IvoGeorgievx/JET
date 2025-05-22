@@ -4,6 +4,7 @@ import com.example.jet.category.dto.CategoryDTO;
 import com.example.jet.category.dto.CreateCategoryDTO;
 import com.example.jet.config.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,12 @@ public class CategoryController {
     @PostMapping("new")
     CategoryDTO createCategory(@RequestBody CreateCategoryDTO body) {
         return this.categoryService.createCategory(body);
+    }
+
+    @PostMapping("delete")
+    public ResponseEntity<Void> deleteCategory(@RequestBody String id) {
+        this.categoryService.deleteCategory(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("all")

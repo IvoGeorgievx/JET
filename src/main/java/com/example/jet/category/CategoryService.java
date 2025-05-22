@@ -46,4 +46,8 @@ public class CategoryService {
     public List<CategoryDTO> getCategories(UUID userId) {
         return this.categoryRepository.findByUser(userId).stream().map(categoryEntity -> new CategoryDTO(categoryEntity.getId(), categoryEntity.getName(), categoryEntity.getType(), categoryEntity.getBudget(), categoryEntity.getDefault())).collect(java.util.stream.Collectors.toList());
     }
+
+    public void deleteCategory(String id) {
+        CategoryEntity category = this.categoryRepository.findById(UUID.fromString(id)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such category found"));
+    }
 }
