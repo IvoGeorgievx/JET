@@ -1,6 +1,5 @@
 package com.example.jet.transaction.dto;
 
-import com.example.jet.category.CategoryEntity;
 import com.example.jet.transaction.TransactionType;
 
 import java.util.UUID;
@@ -9,22 +8,22 @@ public class CreateTransactionDTO {
     private TransactionType type;
     private Float amount;
     private String description;
-    private CategoryEntity categoryEntity;
+    private UUID categoryId;
     private UUID userId;
     private Boolean recurring;
 
 
-    public CreateTransactionDTO(TransactionType type, Float amount, String description, CategoryEntity categoryEntity, UUID userId, boolean recurring) {
+    public CreateTransactionDTO(TransactionType type, Float amount, String description, UUID categoryId, UUID userId, boolean recurring) {
         this.type = type;
         this.amount = amount;
         this.description = description;
-        this.categoryEntity = categoryEntity;
+        this.categoryId = categoryId;
         this.userId = userId;
         this.recurring = recurring;
     }
 
-    public CreateTransactionDTO(TransactionType type, Float amount, String description, CategoryEntity categoryEntity, UUID userId) {
-        this(type, amount, description, categoryEntity, userId, false);
+    public CreateTransactionDTO(TransactionType type, Float amount, String description, UUID categoryId, UUID userId) {
+        this(type, amount, description, categoryId, userId, false);
     }
 
     public CreateTransactionDTO() {
@@ -70,11 +69,11 @@ public class CreateTransactionDTO {
         this.description = description;
     }
 
-    public CategoryEntity getCategory() {
-        return categoryEntity;
+    public UUID getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(CategoryEntity categoryEntity) {
-        this.categoryEntity = categoryEntity;
+    public void setCategoryId(UUID categoryId) {
+        this.categoryId = categoryId;
     }
 }

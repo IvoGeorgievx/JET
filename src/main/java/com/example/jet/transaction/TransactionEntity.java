@@ -41,6 +41,9 @@ public class TransactionEntity {
     @JsonBackReference("user-transactions")
     private UserEntity userEntity;
 
+    public TransactionEntity() {
+    }
+
     public TransactionEntity(TransactionType type, Float amount, String description, CategoryEntity categoryEntity, UserEntity userEntity, boolean recurring) {
         this.type = type;
         this.amount = amount;

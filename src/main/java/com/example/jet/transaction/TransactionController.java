@@ -1,11 +1,11 @@
 package com.example.jet.transaction;
 
+import com.example.jet.config.AuthenticatedUser;
 import com.example.jet.transaction.dto.CreateTransactionDTO;
 import com.example.jet.transaction.dto.OverallTransactionDTO;
 import com.example.jet.transaction.dto.TransactionDTO;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("transactions")
@@ -18,12 +18,12 @@ public class TransactionController {
     }
 
     @PostMapping("new")
-    TransactionDTO createTransaction(@RequestBody CreateTransactionDTO body) {
-        return this.transactionService.createTransaction(body);
+    TransactionDTO createTransaction(@AuthenticationPrincipal AuthenticatedUser user, @RequestBody CreateTransactionDTO body) {
+        return this.transactionService.createTransaction(user.getUserId(), body);
     }
 
     @GetMapping("overall")
-    OverallTransactionDTO getOverallTransactions() {
-        return this.transactionService.getOverallTransactions(UUID.fromString("f98a9b98-fed8-459f-af8f-4ef3bf376134"), TransactionPeriod.DAILY);
+    OverallTransactionDTO getOverallTransactions(@AuthenticationPrincipal AuthenticatedUser user) {
+        return this.transactionService.getOverallTransactions(user.getUserId(), TransactionPeriod.DAILY);
     }
 }

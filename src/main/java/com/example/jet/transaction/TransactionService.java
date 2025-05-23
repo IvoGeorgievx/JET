@@ -31,11 +31,12 @@ public class TransactionService {
     }
 
 
-    public TransactionDTO createTransaction(CreateTransactionDTO data) {
-        Boolean isRecurring = data.isRecurring();
-        CategoryEntity categoryEntity = this.categoryRepository.findById(data.getCategory().getId()).orElseThrow(() -> new IllegalArgumentException("Category not found"));
-        UserEntity userEntity = this.userRepository.findById(data.getUserId()).orElseThrow(() -> new IllegalArgumentException("No such user found"));
-        TransactionEntity transactionEntity = new TransactionEntity(data.getType(), data.getAmount(), data.getDescription(), data.getCategory(), userEntity, isRecurring);
+    public TransactionDTO createTransaction(UUID userId, CreateTransactionDTO data) {
+        Boolean isRecurring = false;
+//        fix this ^
+        CategoryEntity categoryEntity = this.categoryRepository.findById(data.getCategoryId()).orElseThrow(() -> new IllegalArgumentException("Category not found"));
+        UserEntity userEntity = this.userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("No such user found"));
+        TransactionEntity transactionEntity = new TransactionEntity(data.getType(), data.getAmount(), data.getDescription(), categoryEntity, userEntity, isRecurring);
         TransactionEntity savedTransactionEntity = this.transactionRepository.save(transactionEntity);
         // make sure to set a recurring timeline later on.
         return new TransactionDTO(savedTransactionEntity.getId(), savedTransactionEntity.getType(), savedTransactionEntity.getAmount(), savedTransactionEntity.getDescription(), categoryEntity, savedTransactionEntity.getUserEntity().getId());
