@@ -1,13 +1,11 @@
 package com.example.jet.transaction.dto;
 
-import com.example.jet.transaction.TransactionPeriod;
-
 public class OverallTransactionDTO {
     private Float income;
     private Float expense;
-    private TransactionPeriod period;
+    private String period;
 
-    public OverallTransactionDTO(Float income, Float expense, TransactionPeriod period) {
+    public OverallTransactionDTO(Float income, Float expense, String period) {
         this.income = income;
         this.expense = expense;
         this.period = period;
@@ -29,11 +27,11 @@ public class OverallTransactionDTO {
         this.expense = expense;
     }
 
-    public TransactionPeriod getPeriod() {
+    public String getPeriod() {
         return period;
     }
 
-    public void setPeriod(TransactionPeriod period) {
+    public void setPeriod(String period) {
         this.period = period;
     }
 }

@@ -42,19 +42,20 @@ public class TransactionService {
         return new TransactionDTO(savedTransactionEntity.getId(), savedTransactionEntity.getType(), savedTransactionEntity.getAmount(), savedTransactionEntity.getDescription(), categoryEntity, savedTransactionEntity.getUserEntity().getId());
     }
 
-    public OverallTransactionDTO getOverallTransactions(UUID userId, TransactionPeriod period) {
+    public OverallTransactionDTO getOverallTransactions(UUID userId, String period) {
         UserEntity userEntity = this.userService.getUserById(userId);
-        LocalDate now = LocalDate.now();
+        LocalDate end = LocalDate.now();
         LocalDate start = switch (period) {
-            case DAILY -> now;
-            case WEEKLY -> now.minusDays(6);
-            case MONTHLY -> now.minusMonths(1);
-            case YEARLY -> now.minusYears(1);
+            case "Daily" -> end;
+            case "Weekly" -> end.minusDays(6);
+            case "Monthly" -> end.minusMonths(1);
+            case "Yearly" -> end.minusYears(1);
             default -> throw new IllegalArgumentException("Invalid period");
         };
 
-        List<TransactionEntity> expenseTransactionEntities = this.transactionRepository.findByPeriod(userEntity.getId(), TransactionType.EXPENSE, now, start);
-        List<TransactionEntity> incomeTransactionEntities = this.transactionRepository.findByPeriod(userEntity.getId(), TransactionType.INCOME, now, start);
+
+        List<TransactionEntity> expenseTransactionEntities = this.transactionRepository.findByPeriod(userEntity.getId(), TransactionType.EXPENSE, start, end);
+        List<TransactionEntity> incomeTransactionEntities = this.transactionRepository.findByPeriod(userEntity.getId(), TransactionType.INCOME, start, end);
 
         Float expensesAmount = expenseTransactionEntities.stream().map(TransactionEntity::getAmount).reduce(0f, Float::sum);
         Float incomeAmount = incomeTransactionEntities.stream().map(TransactionEntity::getAmount).reduce(0f, Float::sum);

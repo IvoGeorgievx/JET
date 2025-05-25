@@ -12,7 +12,7 @@ import java.util.UUID;
 @Repository
 public interface TransactionRepository extends JpaRepository<TransactionEntity, UUID> {
 
-    @Query("SELECT t FROM TransactionEntity t WHERE t.userEntity.id = :userId and t.type =:type AND t.date BETWEEN :start AND :end")
+    @Query("SELECT t FROM TransactionEntity t WHERE t.userEntity.id = :userId and t.type = :type AND t.date BETWEEN :start AND :end")
     List<TransactionEntity> findByPeriod(@Param("userId") UUID userId, @Param("type") TransactionType type, @Param("start") LocalDate start, @Param("end") LocalDate end);
 
 }

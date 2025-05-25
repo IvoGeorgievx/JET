@@ -23,7 +23,7 @@ public class TransactionController {
     }
 
     @GetMapping("overall")
-    OverallTransactionDTO getOverallTransactions(@AuthenticationPrincipal AuthenticatedUser user) {
-        return this.transactionService.getOverallTransactions(user.getUserId(), TransactionPeriod.DAILY);
+    OverallTransactionDTO getOverallTransactions(@AuthenticationPrincipal AuthenticatedUser user, @RequestParam String period) {
+        return this.transactionService.getOverallTransactions(user.getUserId(), period);
     }
 }
