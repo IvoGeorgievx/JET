@@ -8,7 +8,9 @@ import com.example.jet.transaction.dto.TransactionDTO;
 import com.example.jet.user.UserEntity;
 import com.example.jet.user.UserRepository;
 import com.example.jet.user.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -40,6 +42,25 @@ public class TransactionService {
         TransactionEntity savedTransactionEntity = this.transactionRepository.save(transactionEntity);
         // make sure to set a recurring timeline later on.
         return new TransactionDTO(savedTransactionEntity.getId(), savedTransactionEntity.getType(), savedTransactionEntity.getAmount(), savedTransactionEntity.getDescription(), categoryEntity, savedTransactionEntity.getUserEntity().getId());
+    }
+
+    public TransactionDTO updateTransaction(UUID userId, CreateTransactionDTO data, UUID transactionId) {
+        TransactionEntity transaction = this.transactionRepository.findById(transactionId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "No such transaction found"));
+
+        transaction.setAmount(data.getAmount());
+        transaction.setDescription(data.getDescription());
+        transaction.setType(data.getType());
+        TransactionEntity updatedTransaction = transactionRepository.save(transaction);
+
+//        returns nested data from the entities -> should fix the dto
+
+        return new TransactionDTO(updatedTransaction.getId(), updatedTransaction.getType(), updatedTransaction.getAmount(), updatedTransaction.getDescription(), updatedTransaction.getCategoryEntity(), updatedTransaction.getUserEntity().getId());
+    }
+
+    public void deleteTransaction(UUID transactionId) {
+        TransactionEntity transaction = this.transactionRepository.findById(transactionId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "No transaction with the given id found."));
+
+        this.transactionRepository.delete(transaction);
     }
 
     public OverallTransactionDTO getOverallTransactions(UUID userId, String period) {
