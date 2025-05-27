@@ -4,10 +4,13 @@ import com.example.jet.category.CategoryEntity;
 import com.example.jet.category.CategoryRepository;
 import com.example.jet.transaction.dto.CreateTransactionDTO;
 import com.example.jet.transaction.dto.OverallTransactionDTO;
+import com.example.jet.transaction.dto.PaginatedTransactionDTO;
 import com.example.jet.transaction.dto.TransactionDTO;
 import com.example.jet.user.UserEntity;
 import com.example.jet.user.UserRepository;
 import com.example.jet.user.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -44,7 +47,7 @@ public class TransactionService {
         return new TransactionDTO(savedTransactionEntity.getId(), savedTransactionEntity.getType(), savedTransactionEntity.getAmount(), savedTransactionEntity.getDescription(), categoryEntity, savedTransactionEntity.getUserEntity().getId());
     }
 
-    public TransactionDTO updateTransaction(UUID userId, CreateTransactionDTO data, UUID transactionId) {
+    public TransactionDTO updateTransaction(CreateTransactionDTO data, UUID transactionId) {
         TransactionEntity transaction = this.transactionRepository.findById(transactionId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "No such transaction found"));
 
         transaction.setAmount(data.getAmount());
@@ -61,6 +64,28 @@ public class TransactionService {
         TransactionEntity transaction = this.transactionRepository.findById(transactionId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "No transaction with the given id found."));
 
         this.transactionRepository.delete(transaction);
+    }
+
+    public PaginatedTransactionDTO getTransactions(UUID userId, String period, int page, int perPage) {
+        LocalDate end = LocalDate.now();
+        LocalDate start = switch (period) {
+            case "Daily" -> end;
+            case "Weekly" -> end.minusDays(6);
+            case "Monthly" -> end.minusMonths(1);
+            case "Yearly" -> end.minusYears(1);
+            default -> throw new IllegalArgumentException("Invalid period");
+        };
+
+        PageRequest pageRequest = PageRequest.of(page, perPage);
+        Page<TransactionEntity> transactions = this.transactionRepository.findByUserEntity(userId, pageRequest, start, end);
+        List<TransactionDTO> transactionDTOS = transactions.stream().map(transaction -> new TransactionDTO(transaction.getId(), transaction.getType(), transaction.getAmount(), transaction.getDescription(), transaction.getCategoryEntity(), transaction.getUserEntity().getId())).toList();
+
+        return new PaginatedTransactionDTO(
+                transactionDTOS,
+                transactions.getTotalPages(),
+                (int) transactions.getTotalElements()
+        );
+
     }
 
     public OverallTransactionDTO getOverallTransactions(UUID userId, String period) {

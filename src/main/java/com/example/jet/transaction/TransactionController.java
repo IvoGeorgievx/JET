@@ -3,6 +3,7 @@ package com.example.jet.transaction;
 import com.example.jet.config.AuthenticatedUser;
 import com.example.jet.transaction.dto.CreateTransactionDTO;
 import com.example.jet.transaction.dto.OverallTransactionDTO;
+import com.example.jet.transaction.dto.PaginatedTransactionDTO;
 import com.example.jet.transaction.dto.TransactionDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,14 +26,20 @@ public class TransactionController {
         return this.transactionService.createTransaction(user.getUserId(), body);
     }
 
+    @GetMapping
+    PaginatedTransactionDTO getTransactions(@AuthenticationPrincipal AuthenticatedUser user, @RequestParam("period") String period, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "perPage", defaultValue = "10") int perPage) {
+        return this.transactionService.getTransactions(user.getUserId(), period, page, perPage);
+    }
+
+
+    @PutMapping("{transactionId}")
+    TransactionDTO updateTransaction(@PathVariable String transactionId, @RequestBody CreateTransactionDTO body) {
+        return this.transactionService.updateTransaction(body, UUID.fromString(transactionId));
+    }
+
     @GetMapping("overall")
     OverallTransactionDTO getOverallTransactions(@AuthenticationPrincipal AuthenticatedUser user, @RequestParam String period) {
         return this.transactionService.getOverallTransactions(user.getUserId(), period);
-    }
-
-    @PutMapping("{transactionId}")
-    TransactionDTO updateTransaction(@AuthenticationPrincipal AuthenticatedUser user, @PathVariable String transactionId, @RequestBody CreateTransactionDTO body) {
-        return this.transactionService.updateTransaction(user.getUserId(), body, UUID.fromString(transactionId));
     }
 
 
