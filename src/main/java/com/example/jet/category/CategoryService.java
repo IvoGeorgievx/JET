@@ -49,5 +49,6 @@ public class CategoryService {
 
     public void deleteCategory(String id) {
         CategoryEntity category = this.categoryRepository.findById(UUID.fromString(id)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such category found"));
+        this.categoryRepository.delete(category);
     }
 }

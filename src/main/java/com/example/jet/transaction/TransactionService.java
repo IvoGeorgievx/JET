@@ -2,6 +2,7 @@ package com.example.jet.transaction;
 
 import com.example.jet.category.CategoryEntity;
 import com.example.jet.category.CategoryRepository;
+import com.example.jet.category.dto.CategoryDTO;
 import com.example.jet.transaction.dto.CreateTransactionDTO;
 import com.example.jet.transaction.dto.OverallTransactionDTO;
 import com.example.jet.transaction.dto.PaginatedTransactionDTO;
@@ -43,8 +44,9 @@ public class TransactionService {
         UserEntity userEntity = this.userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("No such user found"));
         TransactionEntity transactionEntity = new TransactionEntity(data.getType(), data.getAmount(), data.getDescription(), categoryEntity, userEntity, isRecurring);
         TransactionEntity savedTransactionEntity = this.transactionRepository.save(transactionEntity);
+        CategoryDTO categoryDto = new CategoryDTO(categoryEntity.getId(), categoryEntity.getName(), categoryEntity.getType(), categoryEntity.getBudget(), categoryEntity.getDefault());
         // make sure to set a recurring timeline later on.
-        return new TransactionDTO(savedTransactionEntity.getId(), savedTransactionEntity.getType(), savedTransactionEntity.getAmount(), savedTransactionEntity.getDescription(), categoryEntity, savedTransactionEntity.getUserEntity().getId());
+        return new TransactionDTO(savedTransactionEntity.getId(), savedTransactionEntity.getType(), savedTransactionEntity.getAmount(), savedTransactionEntity.getDescription(), categoryDto, savedTransactionEntity.getUserEntity().getId());
     }
 
     public TransactionDTO updateTransaction(CreateTransactionDTO data, UUID transactionId) {
@@ -54,10 +56,10 @@ public class TransactionService {
         transaction.setDescription(data.getDescription());
         transaction.setType(data.getType());
         TransactionEntity updatedTransaction = transactionRepository.save(transaction);
-
+        CategoryDTO categoryDTO = convertToCategoryDTO(updatedTransaction);
 //        returns nested data from the entities -> should fix the dto
 
-        return new TransactionDTO(updatedTransaction.getId(), updatedTransaction.getType(), updatedTransaction.getAmount(), updatedTransaction.getDescription(), updatedTransaction.getCategoryEntity(), updatedTransaction.getUserEntity().getId());
+        return new TransactionDTO(updatedTransaction.getId(), updatedTransaction.getType(), updatedTransaction.getAmount(), updatedTransaction.getDescription(), categoryDTO, updatedTransaction.getUserEntity().getId());
     }
 
     public void deleteTransaction(UUID transactionId) {
@@ -78,13 +80,9 @@ public class TransactionService {
 
         PageRequest pageRequest = PageRequest.of(page, perPage);
         Page<TransactionEntity> transactions = this.transactionRepository.findByUserEntity(userId, pageRequest, start, end);
-        List<TransactionDTO> transactionDTOS = transactions.stream().map(transaction -> new TransactionDTO(transaction.getId(), transaction.getType(), transaction.getAmount(), transaction.getDescription(), transaction.getCategoryEntity(), transaction.getUserEntity().getId())).toList();
+        List<TransactionDTO> transactionDTOS = transactions.stream().map(transaction -> new TransactionDTO(transaction.getId(), transaction.getType(), transaction.getAmount(), transaction.getDescription(), convertToCategoryDTO(transaction), transaction.getUserEntity().getId())).toList();
 
-        return new PaginatedTransactionDTO(
-                transactionDTOS,
-                transactions.getTotalPages(),
-                (int) transactions.getTotalElements()
-        );
+        return new PaginatedTransactionDTO(transactionDTOS, transactions.getTotalPages(), (int) transactions.getTotalElements());
 
     }
 
@@ -107,6 +105,16 @@ public class TransactionService {
         Float incomeAmount = incomeTransactionEntities.stream().map(TransactionEntity::getAmount).reduce(0f, Float::sum);
 
         return new OverallTransactionDTO(incomeAmount, expensesAmount, period);
+    }
+
+    private CategoryDTO convertToCategoryDTO(TransactionEntity transaction) {
+        return new CategoryDTO(
+                transaction.getCategoryEntity().getId(),
+                transaction.getCategoryEntity().getName(),
+                transaction.getCategoryEntity().getType(),
+                transaction.getCategoryEntity().getBudget(),
+                transaction.getCategoryEntity().getDefault()
+        );
     }
 
 }
