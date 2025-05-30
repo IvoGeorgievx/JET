@@ -22,8 +22,8 @@ public class CategoryController {
     }
 
     @PostMapping("new")
-    CategoryDTO createCategory(@RequestBody CreateCategoryDTO body) {
-        return this.categoryService.createCategory(body);
+    CategoryDTO createCategory(@RequestBody CreateCategoryDTO body, @AuthenticationPrincipal AuthenticatedUser user) {
+        return this.categoryService.createCategory(body, user.getUserId());
     }
 
     @PostMapping("delete")

@@ -6,6 +6,7 @@ import com.example.jet.user.UserEntity;
 import com.example.jet.user.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -24,12 +25,9 @@ public class CategoryService {
     }
 
 
-    public CategoryDTO createCategory(CreateCategoryDTO data) {
-        var userId = data.getUserId();
-        UserEntity user = null;
-        if (userId != null) {
-            user = this.userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("No such user found"));
-        }
+    public CategoryDTO createCategory(CreateCategoryDTO data, UUID userId) {
+
+        UserEntity user = this.userRepository.findById(userId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found"));
 
         CategoryEntity existingCategory = this.categoryRepository.findByName(data.getName()
         ).orElse(null);
