@@ -4,6 +4,7 @@ import com.example.jet.config.AuthenticatedUser;
 import com.example.jet.user.dto.SignInDTO;
 import com.example.jet.user.dto.SignInResponseDTO;
 import com.example.jet.user.dto.SignUpDTO;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class UserController {
 
 
     @PostMapping("sign-up")
-    UserDTO createUser(@RequestBody SignUpDTO signUpRequest) {
+    UserDTO createUser(@RequestBody SignUpDTO signUpRequest) throws BadRequestException {
         return this.userService.createUser(signUpRequest.getUsername(), signUpRequest.getPassword());
     }
 

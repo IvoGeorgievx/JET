@@ -21,6 +21,10 @@ public class UserEntity {
     @Column()
     private String password;
 
+    @Column()
+    private Boolean isFirstLogin;
+
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference("user-categories")
     @JsonIgnoreProperties("user")
@@ -31,9 +35,10 @@ public class UserEntity {
     @JsonIgnoreProperties("userEntity")
     private List<TransactionEntity> transactionEntities;
 
-    public UserEntity(String username, String password) {
+    public UserEntity(String username, String password, Boolean isFirstLogin) {
         this.username = username;
         this.password = password;
+        this.isFirstLogin = isFirstLogin;
     }
 
     public UserEntity() {
@@ -46,7 +51,6 @@ public class UserEntity {
     public void setCategories(List<CategoryEntity> categories) {
         this.categories = categories;
     }
-
 
     public List<TransactionEntity> getTransactions() {
         return transactionEntities;
@@ -78,6 +82,14 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getFirstLogin() {
+        return isFirstLogin;
+    }
+
+    public void setFirstLogin(Boolean firstLogin) {
+        isFirstLogin = firstLogin;
     }
 
 

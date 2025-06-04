@@ -23,7 +23,7 @@ public class CategoryEntity {
     @Column(name = "type")
     private String type;
 
-    @OneToMany(mappedBy = "categoryEntity")
+    @OneToMany(mappedBy = "categoryEntity", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonManagedReference("category-transactions")
     @JsonIgnoreProperties("categoryEntity")
     private Set<TransactionEntity> transactionEntities;
