@@ -29,13 +29,7 @@ public class CategoryService {
 
         UserEntity user = this.userRepository.findById(userId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found"));
 
-        CategoryEntity existingCategory = this.categoryRepository.findByName(data.getName()
-        ).orElse(null);
-
-        if (existingCategory != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category with this name already exists.");
-        }
-
+        
         CategoryEntity newCategoryEntity = new CategoryEntity(data.getName(), data.getType(), data.getBudget(), user, Boolean.TRUE.equals(data.getDefault()));
         CategoryEntity savedCategoryEntity = categoryRepository.save(newCategoryEntity);
         return new CategoryDTO(savedCategoryEntity.getId(), savedCategoryEntity.getName(), savedCategoryEntity.getType(), savedCategoryEntity.getBudget(), savedCategoryEntity.getDefault());

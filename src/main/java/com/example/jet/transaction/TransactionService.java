@@ -12,6 +12,7 @@ import com.example.jet.user.UserRepository;
 import com.example.jet.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -78,7 +79,7 @@ public class TransactionService {
             default -> throw new IllegalArgumentException("Invalid period");
         };
 
-        PageRequest pageRequest = PageRequest.of(page, perPage);
+        PageRequest pageRequest = PageRequest.of(page, perPage, Sort.by(Sort.Direction.DESC, "date"));
         Page<TransactionEntity> transactions = this.transactionRepository.findByUserEntity(userId, pageRequest, start, end);
         List<TransactionDTO> transactionDTOS = transactions.stream().map(transaction -> new TransactionDTO(transaction.getId(), transaction.getType(), transaction.getAmount(), transaction.getDescription(), convertToCategoryDTO(transaction), transaction.getUserEntity().getId())).toList();
 
