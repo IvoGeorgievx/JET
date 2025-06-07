@@ -1,5 +1,7 @@
 package com.example.jet.category.dto;
 
+import com.example.jet.category.CategoryBudgetPeriod;
+
 import java.util.UUID;
 
 public class CategoryDTO {
@@ -7,16 +9,19 @@ public class CategoryDTO {
     private String name;
     private String type;
     private Float budget;
+    private CategoryBudgetPeriod budgetPeriod;
     private Boolean isDefault;
 
     public CategoryDTO(UUID id, String name, String type, Boolean aDefault) {
     }
 
-    public CategoryDTO(UUID id, String name, String type, Float budget, Boolean isDefault) {
+
+    public CategoryDTO(UUID id, String name, String type, Float budget, CategoryBudgetPeriod budgetPeriod, Boolean isDefault) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.budget = budget;
+        this.budgetPeriod = budgetPeriod;
         this.isDefault = isDefault;
     }
 
@@ -59,6 +64,15 @@ public class CategoryDTO {
     public void setType(String type) {
         this.type = type;
     }
+
+    public CategoryBudgetPeriod getBudgetPeriod() {
+        return budgetPeriod;
+    }
+
+    public void setBudgetPeriod(CategoryBudgetPeriod budgetPeriod) {
+        this.budgetPeriod = budgetPeriod;
+    }
+
 }
 
 

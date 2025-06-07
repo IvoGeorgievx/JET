@@ -29,14 +29,14 @@ public class CategoryService {
 
         UserEntity user = this.userRepository.findById(userId).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "User not found"));
 
-        
-        CategoryEntity newCategoryEntity = new CategoryEntity(data.getName(), data.getType(), data.getBudget(), user, Boolean.TRUE.equals(data.getDefault()));
+
+        CategoryEntity newCategoryEntity = new CategoryEntity(data.getName(), data.getType(), data.getBudget(), data.getBudgetPeriod(), user, Boolean.TRUE.equals(data.getDefault()));
         CategoryEntity savedCategoryEntity = categoryRepository.save(newCategoryEntity);
-        return new CategoryDTO(savedCategoryEntity.getId(), savedCategoryEntity.getName(), savedCategoryEntity.getType(), savedCategoryEntity.getBudget(), savedCategoryEntity.getDefault());
+        return new CategoryDTO(savedCategoryEntity.getId(), savedCategoryEntity.getName(), savedCategoryEntity.getType(), savedCategoryEntity.getBudget(), savedCategoryEntity.getBudgetPeriod(), savedCategoryEntity.getDefault());
     }
 
     public List<CategoryDTO> getCategories(UUID userId) {
-        return this.categoryRepository.findByUser(userId).stream().map(categoryEntity -> new CategoryDTO(categoryEntity.getId(), categoryEntity.getName(), categoryEntity.getType(), categoryEntity.getBudget(), categoryEntity.getDefault())).collect(java.util.stream.Collectors.toList());
+        return this.categoryRepository.findByUser(userId).stream().map(categoryEntity -> new CategoryDTO(categoryEntity.getId(), categoryEntity.getName(), categoryEntity.getType(), categoryEntity.getBudget(), categoryEntity.getBudgetPeriod(), categoryEntity.getDefault())).collect(java.util.stream.Collectors.toList());
     }
 
     public void deleteCategory(String id) {

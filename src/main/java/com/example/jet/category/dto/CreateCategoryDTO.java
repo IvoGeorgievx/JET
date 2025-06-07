@@ -1,27 +1,31 @@
 package com.example.jet.category.dto;
 
+import com.example.jet.category.CategoryBudgetPeriod;
+
 import java.util.UUID;
 
 public class CreateCategoryDTO {
     private String name;
     private String type;
     private Float budget;
+    private CategoryBudgetPeriod budgetPeriod;
     private UUID userId;
     private Boolean isDefault;
 
     public CreateCategoryDTO() {
     }
 
-    public CreateCategoryDTO(String name, String type, Float budget, UUID userId, Boolean isDefault) {
+    public CreateCategoryDTO(String name, String type, Float budget, CategoryBudgetPeriod budgetPeriod, UUID userId, Boolean isDefault) {
         this.name = name;
         this.type = type;
         this.budget = budget;
         this.userId = userId;
+        this.budgetPeriod = budgetPeriod;
         this.isDefault = isDefault;
     }
 
-    public CreateCategoryDTO(String name, String type, Float budget, UUID userId) {
-        this(name, type, budget, null, false);
+    public CreateCategoryDTO(String name, String type, Float budget, CategoryBudgetPeriod budgetPeriod, UUID userId) {
+        this(name, type, budget, budgetPeriod, null, false);
     }
 
     public Boolean getDefault() {
@@ -30,6 +34,14 @@ public class CreateCategoryDTO {
 
     public void setDefault(Boolean aDefault) {
         isDefault = aDefault;
+    }
+
+    public CategoryBudgetPeriod getBudgetPeriod() {
+        return budgetPeriod;
+    }
+
+    public void setBudgetPeriod(CategoryBudgetPeriod budgetPeriod) {
+        this.budgetPeriod = budgetPeriod;
     }
 
     public UUID getUserId() {

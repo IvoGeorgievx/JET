@@ -38,19 +38,25 @@ public class CategoryEntity {
     @Column(name = "budget", nullable = true)
     private Float budget;
 
+    @Column(name = "budget_period")
+    @Enumerated(EnumType.STRING)
+    private CategoryBudgetPeriod budgetPeriod;
+
+
     public CategoryEntity() {
     }
 
-    public CategoryEntity(String name, String type, Float budget, UserEntity user, Boolean isDefault) {
+    public CategoryEntity(String name, String type, Float budget, CategoryBudgetPeriod budgetPeriod, UserEntity user, Boolean isDefault) {
         this.name = name;
         this.type = type;
         this.budget = budget;
+        this.budgetPeriod = budgetPeriod;
         this.user = user;
         this.isDefault = isDefault;
     }
 
-    public CategoryEntity(String name, String type, Float budget, UserEntity user) {
-        this(name, type, budget, null, false);
+    public CategoryEntity(String name, String type, Float budget, CategoryBudgetPeriod budgetPeriod, UserEntity user) {
+        this(name, type, budget, budgetPeriod, null, false);
     }
 
     public Boolean getDefault() {
@@ -109,4 +115,13 @@ public class CategoryEntity {
     public void setType(String type) {
         this.type = type;
     }
+
+    public CategoryBudgetPeriod getBudgetPeriod() {
+        return budgetPeriod;
+    }
+
+    public void setBudgetPeriod(CategoryBudgetPeriod budgetPeriod) {
+        this.budgetPeriod = budgetPeriod;
+    }
+
 }

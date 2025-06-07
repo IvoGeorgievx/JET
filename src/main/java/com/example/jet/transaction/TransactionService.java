@@ -45,7 +45,7 @@ public class TransactionService {
         UserEntity userEntity = this.userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("No such user found"));
         TransactionEntity transactionEntity = new TransactionEntity(data.getType(), data.getAmount(), data.getDescription(), categoryEntity, userEntity, isRecurring);
         TransactionEntity savedTransactionEntity = this.transactionRepository.save(transactionEntity);
-        CategoryDTO categoryDto = new CategoryDTO(categoryEntity.getId(), categoryEntity.getName(), categoryEntity.getType(), categoryEntity.getBudget(), categoryEntity.getDefault());
+        CategoryDTO categoryDto = new CategoryDTO(categoryEntity.getId(), categoryEntity.getName(), categoryEntity.getType(), categoryEntity.getBudget(), categoryEntity.getBudgetPeriod(), categoryEntity.getDefault());
         // make sure to set a recurring timeline later on.
         return new TransactionDTO(savedTransactionEntity.getId(), savedTransactionEntity.getType(), savedTransactionEntity.getAmount(), savedTransactionEntity.getDescription(), categoryDto, savedTransactionEntity.getUserEntity().getId());
     }
@@ -109,13 +109,7 @@ public class TransactionService {
     }
 
     private CategoryDTO convertToCategoryDTO(TransactionEntity transaction) {
-        return new CategoryDTO(
-                transaction.getCategoryEntity().getId(),
-                transaction.getCategoryEntity().getName(),
-                transaction.getCategoryEntity().getType(),
-                transaction.getCategoryEntity().getBudget(),
-                transaction.getCategoryEntity().getDefault()
-        );
+        return new CategoryDTO(transaction.getCategoryEntity().getId(), transaction.getCategoryEntity().getName(), transaction.getCategoryEntity().getType(), transaction.getCategoryEntity().getBudget(), transaction.getCategoryEntity().getBudgetPeriod(), transaction.getCategoryEntity().getDefault());
     }
 
 }
