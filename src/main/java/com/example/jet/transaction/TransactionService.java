@@ -47,7 +47,7 @@ public class TransactionService {
         TransactionEntity savedTransactionEntity = this.transactionRepository.save(transactionEntity);
         CategoryDTO categoryDto = new CategoryDTO(categoryEntity.getId(), categoryEntity.getName(), categoryEntity.getType(), categoryEntity.getBudget(), categoryEntity.getBudgetPeriod(), categoryEntity.getDefault());
         // make sure to set a recurring timeline later on.
-        return new TransactionDTO(savedTransactionEntity.getId(), savedTransactionEntity.getType(), savedTransactionEntity.getAmount(), savedTransactionEntity.getDescription(), categoryDto, savedTransactionEntity.getUserEntity().getId());
+        return new TransactionDTO(savedTransactionEntity.getId(), savedTransactionEntity.getDate(), savedTransactionEntity.getType(), savedTransactionEntity.getAmount(), savedTransactionEntity.getDescription(), categoryDto, savedTransactionEntity.getUserEntity().getId());
     }
 
     public TransactionDTO updateTransaction(CreateTransactionDTO data, UUID transactionId) {
@@ -60,7 +60,7 @@ public class TransactionService {
         CategoryDTO categoryDTO = convertToCategoryDTO(updatedTransaction);
 //        returns nested data from the entities -> should fix the dto
 
-        return new TransactionDTO(updatedTransaction.getId(), updatedTransaction.getType(), updatedTransaction.getAmount(), updatedTransaction.getDescription(), categoryDTO, updatedTransaction.getUserEntity().getId());
+        return new TransactionDTO(updatedTransaction.getId(), updatedTransaction.getDate(), updatedTransaction.getType(), updatedTransaction.getAmount(), updatedTransaction.getDescription(), categoryDTO, updatedTransaction.getUserEntity().getId());
     }
 
     public void deleteTransaction(UUID transactionId) {
@@ -81,7 +81,7 @@ public class TransactionService {
 
         PageRequest pageRequest = PageRequest.of(page, perPage, Sort.by(Sort.Direction.DESC, "date"));
         Page<TransactionEntity> transactions = this.transactionRepository.findByUserEntity(userId, pageRequest, start, end);
-        List<TransactionDTO> transactionDTOS = transactions.stream().map(transaction -> new TransactionDTO(transaction.getId(), transaction.getType(), transaction.getAmount(), transaction.getDescription(), convertToCategoryDTO(transaction), transaction.getUserEntity().getId())).toList();
+        List<TransactionDTO> transactionDTOS = transactions.stream().map(transaction -> new TransactionDTO(transaction.getId(), transaction.getDate(), transaction.getType(), transaction.getAmount(), transaction.getDescription(), convertToCategoryDTO(transaction), transaction.getUserEntity().getId())).toList();
 
         return new PaginatedTransactionDTO(transactionDTOS, transactions.getTotalPages(), (int) transactions.getTotalElements());
 

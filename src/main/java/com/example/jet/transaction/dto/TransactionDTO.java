@@ -3,10 +3,12 @@ package com.example.jet.transaction.dto;
 import com.example.jet.category.dto.CategoryDTO;
 import com.example.jet.transaction.TransactionType;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public class TransactionDTO {
     private UUID id;
+    private LocalDate createdAt;
     private TransactionType type;
     private Float amount;
     private String description;
@@ -17,8 +19,10 @@ public class TransactionDTO {
     public TransactionDTO() {
     }
 
-    public TransactionDTO(UUID id, TransactionType type, Float amount, String description, CategoryDTO category, UUID userId) {
+
+    public TransactionDTO(UUID id, LocalDate createdAt, TransactionType type, Float amount, String description, CategoryDTO category, UUID userId) {
         this.id = id;
+        this.createdAt = createdAt;
         this.type = type;
         this.amount = amount;
         this.description = description;
@@ -72,5 +76,13 @@ public class TransactionDTO {
 
     public void setCategoryDTO(CategoryDTO categoryEntity) {
         this.category = categoryEntity;
+    }
+
+    public LocalDate getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
     }
 }
