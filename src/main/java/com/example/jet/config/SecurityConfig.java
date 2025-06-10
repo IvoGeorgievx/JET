@@ -27,7 +27,7 @@ public class SecurityConfig {
                         })
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/sign-in", "/user/sign-up", "/transactions/overall", "/transactions/new", "/category/new", "/error")
+                        .requestMatchers("/user/sign-in", "/user/sign-up", "user/check-username", "/transactions/overall", "/transactions/new", "/category/new", "/error")
                         .permitAll()
                         .anyRequest().authenticated()
                 )

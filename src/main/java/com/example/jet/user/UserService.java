@@ -3,6 +3,7 @@ package com.example.jet.user;
 import com.example.jet.transaction.TransactionRepository;
 import com.example.jet.user.dto.SignInDTO;
 import com.example.jet.user.dto.SignInResponseDTO;
+import com.example.jet.user.dto.UsernameAvailableDTO;
 import com.example.jet.utils.JwtUtil;
 import com.example.jet.utils.PasswordHasher;
 import com.example.jet.utils.PasswordVerifier;
@@ -77,6 +78,11 @@ public class UserService {
     public UserDTO getCurrentUser(UUID userId) {
         UserEntity user = this.userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         return new UserDTO(user.getId(), user.getUsername(), user.getFirstLogin());
+    }
+
+    public UsernameAvailableDTO checkUsernameAvailable(String username) {
+        boolean available = this.userRepository.findByUsername(username).isEmpty();
+        return new UsernameAvailableDTO(available);
     }
 
 }

@@ -4,6 +4,7 @@ import com.example.jet.config.AuthenticatedUser;
 import com.example.jet.user.dto.SignInDTO;
 import com.example.jet.user.dto.SignInResponseDTO;
 import com.example.jet.user.dto.SignUpDTO;
+import com.example.jet.user.dto.UsernameAvailableDTO;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,5 +41,10 @@ public class UserController {
     @GetMapping("info")
     UserDTO getCurrentUser(@AuthenticationPrincipal AuthenticatedUser user) {
         return this.userService.getCurrentUser(user.getUserId());
+    }
+
+    @GetMapping("check-username")
+    UsernameAvailableDTO checkUsernameAvailable(@RequestParam String username) {
+        return this.userService.checkUsernameAvailable(username);
     }
 }
