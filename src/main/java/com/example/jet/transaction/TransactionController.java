@@ -1,14 +1,13 @@
 package com.example.jet.transaction;
 
+import com.example.jet.category.CategoryService;
 import com.example.jet.config.AuthenticatedUser;
-import com.example.jet.transaction.dto.CreateTransactionDTO;
-import com.example.jet.transaction.dto.OverallTransactionDTO;
-import com.example.jet.transaction.dto.PaginatedTransactionDTO;
-import com.example.jet.transaction.dto.TransactionDTO;
+import com.example.jet.transaction.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -17,7 +16,7 @@ public class TransactionController {
 
     private final TransactionService transactionService;
 
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(TransactionService transactionService, CategoryService categoryService) {
         this.transactionService = transactionService;
     }
 
@@ -47,6 +46,11 @@ public class TransactionController {
     ResponseEntity<Void> deleteTransaction(@PathVariable String transactionId) {
         this.transactionService.deleteTransaction(UUID.fromString(transactionId));
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("spending")
+    List<SpendingByCategoryDTO> getSpendingByCategory(@AuthenticationPrincipal AuthenticatedUser user, @RequestParam(value = "period", defaultValue = "YEARLY") String period) {
+        return this.transactionService.getSpendingByCategory(user.getUserId(), period);
     }
 
 }

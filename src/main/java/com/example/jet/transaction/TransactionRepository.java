@@ -20,4 +20,7 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
     @Query("Select t FROM TransactionEntity t WHERE t.userEntity.id =:userId AND t.date BETWEEN :start AND :end")
     Page<TransactionEntity> findByUserEntity(@Param("userId") UUID userId, Pageable pageable, @Param("start") LocalDate start, @Param("end") LocalDate end);
 
+    @Query("Select t FROM TransactionEntity t WHERE t.userEntity.id =:userId AND t.date BETWEEN :start AND :end")
+    List<TransactionEntity> findRawByUserEntity(@Param("userId") UUID userId, @Param("start") LocalDate start, @Param("end") LocalDate end);
+
 }

@@ -3,10 +3,7 @@ package com.example.jet.transaction;
 import com.example.jet.category.CategoryEntity;
 import com.example.jet.category.CategoryRepository;
 import com.example.jet.category.dto.CategoryDTO;
-import com.example.jet.transaction.dto.CreateTransactionDTO;
-import com.example.jet.transaction.dto.OverallTransactionDTO;
-import com.example.jet.transaction.dto.PaginatedTransactionDTO;
-import com.example.jet.transaction.dto.TransactionDTO;
+import com.example.jet.transaction.dto.*;
 import com.example.jet.user.UserEntity;
 import com.example.jet.user.UserRepository;
 import com.example.jet.user.UserService;
@@ -18,8 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
+import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
@@ -89,14 +89,9 @@ public class TransactionService {
 
     public OverallTransactionDTO getOverallTransactions(UUID userId, String period) {
         UserEntity userEntity = this.userService.getUserById(userId);
-        LocalDate end = LocalDate.now();
-        LocalDate start = switch (period) {
-            case "Daily" -> end;
-            case "Weekly" -> end.minusDays(6);
-            case "Monthly" -> end.minusMonths(1);
-            case "Yearly" -> end.minusYears(1);
-            default -> throw new IllegalArgumentException("Invalid period");
-        };
+        AbstractMap.SimpleEntry<LocalDate, LocalDate> time = getStartAndEndPeriod(period);
+        LocalDate start = time.getKey();
+        LocalDate end = time.getValue();
 
 
         List<TransactionEntity> expenseTransactionEntities = this.transactionRepository.findByPeriod(userEntity.getId(), TransactionType.EXPENSE, start, end);
@@ -110,6 +105,44 @@ public class TransactionService {
 
     private CategoryDTO convertToCategoryDTO(TransactionEntity transaction) {
         return new CategoryDTO(transaction.getCategoryEntity().getId(), transaction.getCategoryEntity().getName(), transaction.getCategoryEntity().getType(), transaction.getCategoryEntity().getBudget(), transaction.getCategoryEntity().getBudgetPeriod(), transaction.getCategoryEntity().getDefault());
+    }
+
+    public List<SpendingByCategoryDTO> getSpendingByCategory(UUID userId, String period) {
+        AbstractMap.SimpleEntry<LocalDate, LocalDate> time = getStartAndEndPeriod(period);
+        LocalDate start = time.getKey();
+        LocalDate end = time.getValue();
+
+        List<TransactionEntity> entities = this.transactionRepository.findRawByUserEntity(userId, start, end);
+
+        Map<String, List<TransactionEntity>> grouped = entities.stream()
+                .collect(Collectors.groupingBy(e -> e.getCategoryEntity().getName()));
+
+        return grouped.entrySet().stream()
+                .map(entry -> {
+                    String categoryName = entry.getKey();
+                    int expense = entry.getValue().stream()
+                            .filter(t -> t.getType() == TransactionType.EXPENSE)
+                            .mapToInt(t -> t.getAmount().intValue())
+                            .sum();
+                    int income = entry.getValue().stream()
+                            .filter(t -> t.getType() == TransactionType.INCOME)
+                            .mapToInt(t -> t.getAmount().intValue())
+                            .sum();
+                    return new SpendingByCategoryDTO(categoryName, expense, income);
+                })
+                .collect(Collectors.toList());
+    }
+
+    private AbstractMap.SimpleEntry<LocalDate, LocalDate> getStartAndEndPeriod(String period) {
+        LocalDate end = LocalDate.now();
+        LocalDate startPeriod = switch (period) {
+            case "Daily" -> end;
+            case "Weekly" -> end.minusDays(6);
+            case "Monthly" -> end.minusMonths(1);
+            case "Yearly" -> end.minusYears(1);
+            default -> throw new IllegalArgumentException("Invalid period");
+        };
+        return new AbstractMap.SimpleEntry<>(startPeriod, end);
     }
 
 }
